@@ -39,11 +39,8 @@ public unsafe class ActionBarSkillBuilder
                 var actionBarSlot = &actionBar[slotIndex];
                 var hotBarSlot = hotBar[slotIndex];
 
-                if (hotBarSlot->CommandType == HotbarSlotType.Macro)
-                {
-                    ActionBarSkill skill = new(actionBarSlot->Icon, hotBarSlot->CommandId, actionBarIndex, slotIndex);
-                    actionBarSkills.Add(skill);
-                }
+                ActionBarSkill skill = new(actionBarSlot->Icon, hotBarSlot->CommandId, actionBarIndex, slotIndex);
+                actionBarSkills.Add(skill);
             }
         }
 

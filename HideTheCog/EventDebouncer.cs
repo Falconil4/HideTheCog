@@ -21,7 +21,7 @@ public class EventDebouncer {
 
     public void Init()
     {
-        _actionBarUpdater.OnActionBarUpdate();
+        _actionBarUpdater.OnActionBarUpdate(true);
     }
 
     public void Next(AddonActionBarBase? eventData) => _subject.OnNext(eventData);

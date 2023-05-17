@@ -14,14 +14,14 @@ public class ActionBarUpdater
         _actionBarBuilder = new();
     }
 
-    public void OnActionBarUpdate()
+    public void OnActionBarUpdate(bool rebuild = false)
     {
         if (HideTheCog.ClientState == null || !HideTheCog.ClientState.IsLoggedIn) return;
 
         var actionBarSkills = _actionBarBuilder.Build();
-        if (actionBarSkills.SequenceEqual(_actionBarSkills)) return;
+        if (!rebuild && actionBarSkills.SequenceEqual(_actionBarSkills)) return;
 
-        var addedSkills = actionBarSkills.Except(_actionBarSkills).ToList();
+        var addedSkills = rebuild ? actionBarSkills : actionBarSkills.Except(_actionBarSkills).ToList();
         addedSkills.ForEach(s => s.Hide());
 
         _actionBarSkills = actionBarSkills;
