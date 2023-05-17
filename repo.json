@@ -1,20 +1,18 @@
-[
-    {
-        "Author": "Falco",
-        "Name": "Hide The Cog",
-        "InternalName": "HideTheCog",
-        "AssemblyVersion": "0.0.0.1",
-        "Description": "",
-        "ApplicableVersion": "any",
-        "RepoUrl": "https://github.com/Falconil4/HideTheCog",
-        "DalamudApiLevel": 8,
-        "LoadRequiredState": 0,
-        "LoadSync": false,
-        "LoadPriority": 0,
-        "Punchline": "Hides the macro cog icon",
-        "AcceptsFeedback": true,
-        "DownloadLinkInstall": "https://github.com/Falconil4/HideTheCog/raw/main/latest.zip",
-        "DownloadLinkTesting": "https://github.com/Falconil4/HideTheCog/raw/main/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/Falconil4/HideTheCog/raw/main/latest.zip"
-    }
-]
+{
+  "Author": "Falco",
+  "Name": "Hide The Cog",
+  "InternalName": "HideTheCog",
+  "AssemblyVersion": "0.0.0.2",
+  "Description": "",
+  "ApplicableVersion": "any",
+  "RepoUrl": "https://github.com/Falconil4/HideTheCog",
+  "DalamudApiLevel": 8,
+  "LoadRequiredState": 0,
+  "LoadSync": false,
+  "LoadPriority": 0,
+  "Punchline": "Hides the macro cog icon",
+  "AcceptsFeedback": true,
+  "DownloadLinkInstall": "https://github.com/Falconil4/HideTheCog/raw/main/latest.zip",
+  "DownloadLinkTesting": "https://github.com/Falconil4/HideTheCog/raw/main/latest.zip",
+  "DownloadLinkUpdate": "https://github.com/Falconil4/HideTheCog/raw/main/latest.zip"
+}

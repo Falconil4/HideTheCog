@@ -1,3 +1,4 @@
+using System;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace HideTheCog;
@@ -21,16 +22,12 @@ public unsafe class ActionBarSkill
 
     public void Hide() => UIHelper.Hide(_macroIcon);
 
-    public void Dispose() => Show();
-
-    public override bool Equals(object? obj)
+    public void Dispose()
     {
-        if (obj is ActionBarSkill abs)
-        {
-            return CommandId == abs.CommandId && ActionBarIndex == abs.ActionBarIndex && SlotIndex == abs.SlotIndex;
-        }
-        return base.Equals(obj);
+        Show();
     }
 
-    public override int GetHashCode() => base.GetHashCode();
+    public override bool Equals(object? obj) => obj?.GetHashCode() == GetHashCode();
+
+    public override int GetHashCode() => HashCode.Combine(CommandId, ActionBarIndex, SlotIndex);
 }

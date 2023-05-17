@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace HideTheCog;
 
@@ -9,10 +8,6 @@ public class ActionBarUpdater
 {
     private ActionBarSkillBuilder _actionBarBuilder { get; set; }
     private List<ActionBarSkill> _actionBarSkills { get; set; } = new();
-    private DateTime _lastActionBarUpdate { get; set; } = DateTime.MinValue;
-
-    private const int TIME_BETWEEN_ACTION_BAR_UPDATES = 100;
-    private const int DELAY_BEFORE_HIDING = 10;
 
     public ActionBarUpdater()
     {
@@ -21,20 +16,15 @@ public class ActionBarUpdater
 
     public void OnActionBarUpdate()
     {
-        TimeSpan timeSinceLastUpdate = DateTime.Now - _lastActionBarUpdate;
-        if (timeSinceLastUpdate.TotalMilliseconds < TIME_BETWEEN_ACTION_BAR_UPDATES) return;
-        _lastActionBarUpdate = DateTime.Now;
+        if (HideTheCog.ClientState == null || !HideTheCog.ClientState.IsLoggedIn) return;
 
         var actionBarSkills = _actionBarBuilder.Build();
         if (actionBarSkills.SequenceEqual(_actionBarSkills)) return;
 
-        Dispose();
-        Task.Run(async () =>
-        {
-            await Task.Delay(DELAY_BEFORE_HIDING);
-            _actionBarSkills.AddRange(actionBarSkills);
-            _actionBarSkills.ForEach(skill => skill.Hide());
-        });
+        var addedSkills = actionBarSkills.Except(_actionBarSkills).ToList();
+        addedSkills.ForEach(s => s.Hide());
+
+        _actionBarSkills = actionBarSkills;
     }
 
     public void Dispose()

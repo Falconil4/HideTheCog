@@ -1,10 +1,10 @@
+using System;
 using Dalamud.Game;
 using Dalamud.Game.ClientState;
 using Dalamud.Hooking;
 using Dalamud.Plugin;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using System;
 
 namespace HideTheCog;
 
@@ -12,8 +12,8 @@ public sealed unsafe class HideTheCog : IDalamudPlugin
 {
     public string Name => "Hide The Cog";
 
-    private ClientState _clientState { get; init; }
-    private ActionBarUpdater _actionBarUpdater { get; init; }
+    public static ClientState? ClientState { get; private set; }
+    private EventDebouncer _eventDebouncer { get; init; }
 
     private delegate byte ActionBarUpdate(AddonActionBarBase* atkUnitBase, NumberArrayData** numberArrayData, StringArrayData** stringArrayData);
     private const string ACTION_BAR_UPDATE_SIGNATURE = "E8 ?? ?? ?? ?? 83 BB ?? ?? ?? ?? ?? 75 09";
@@ -21,51 +21,60 @@ public sealed unsafe class HideTheCog : IDalamudPlugin
 
     public HideTheCog(ClientState clientState)
     {
-        _clientState = clientState;
-        _actionBarUpdater = new();
+        ClientState = clientState;
+        _eventDebouncer = new();
 
-        var scanner = new SigScanner(true);
-        var address = scanner.ScanText(ACTION_BAR_UPDATE_SIGNATURE);
-        _actionBarHook = Hook<ActionBarUpdate>.FromAddress(address, ActionBarUpdateDetour);
-        OnLogin();
+        _actionBarHook = CreateHook();
+        Init();
 
-        _clientState.Login += OnLogin;
-        _clientState.Logout += OnLogout;
+        ClientState.Login += OnLogin;
+        ClientState.Logout += OnLogout;
     }
 
-    private void OnLogin(object? sender, EventArgs e) => OnLogin();
-    private void OnLogin()
+    private Hook<ActionBarUpdate> CreateHook()
     {
-        if (_clientState?.IsLoggedIn == true)
+        var scanner = new SigScanner(true);
+        var address = scanner.ScanText(ACTION_BAR_UPDATE_SIGNATURE);
+
+        return Hook<ActionBarUpdate>.FromAddress(address, ActionBarUpdateDetour);
+    }
+
+
+    private void Init()
+    {
+        if (ClientState?.IsLoggedIn == true)
         {
             _actionBarHook.Enable();
-            _actionBarUpdater.OnActionBarUpdate();
+            _eventDebouncer.Init();
         }
     }
 
-    private void OnLogout(object? sender, EventArgs e) => OnLogout();
-    private void OnLogout()
+    private void Deinit()
     {
         _actionBarHook.Disable();
-        _actionBarUpdater.Dispose();
+        _eventDebouncer.Dispose();
     }
 
     public void Dispose() 
     {
-        if (_clientState != null)
+        if (ClientState != null)
         {
-            _clientState.Login -= OnLogin;
-            _clientState.Logout -= OnLogout;
+            ClientState.Login -= OnLogin;
+            ClientState.Logout -= OnLogout;
+            ClientState = null;
         }
 
-        OnLogout();
+        Deinit();
     }
+
+    private void OnLogin(object? sender, EventArgs e) => Init();
+    private void OnLogout(object? sender, EventArgs e) => Deinit();
 
     private byte ActionBarUpdateDetour(AddonActionBarBase* atkUnitBase, NumberArrayData** numberArrayData, StringArrayData** stringArrayData)
     {
-        if (_clientState?.IsLoggedIn == true)
+        if (ClientState?.IsLoggedIn == true)
         {
-            _actionBarUpdater.OnActionBarUpdate();
+            _eventDebouncer.Next(*atkUnitBase);
         }
         return _actionBarHook.Original(atkUnitBase, numberArrayData, stringArrayData);
     }
