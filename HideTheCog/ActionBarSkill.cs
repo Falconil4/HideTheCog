@@ -18,9 +18,9 @@ public unsafe class ActionBarSkill
         SlotIndex = slotIndex;
     }
 
-    public void Show() => UIHelper.Show(_macroIcon);
+    public void Show() => _macroIcon->ToggleVisibility(true);
 
-    public void Hide() => UIHelper.Hide(_macroIcon);
+    public void Hide() => _macroIcon->ToggleVisibility(false);
 
     public void Dispose()
     {

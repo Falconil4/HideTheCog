@@ -1,4 +1,3 @@
-using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
@@ -27,7 +26,6 @@ public unsafe class ActionBarSkillBuilder
     public List<ActionBarSkill> Build()
     {
         List<ActionBarSkill> actionBarSkills = new();
-        var actionManager = ActionManager.Instance();
 
         for (int actionBarIndex = 0; actionBarIndex < _actionBarNames.Count; actionBarIndex++)
         {
@@ -39,8 +37,11 @@ public unsafe class ActionBarSkillBuilder
                 var actionBarSlot = &actionBar[slotIndex];
                 var hotBarSlot = hotBar[slotIndex];
 
-                ActionBarSkill skill = new(actionBarSlot->Icon, hotBarSlot->CommandId, actionBarIndex, slotIndex);
-                actionBarSkills.Add(skill);
+                if (hotBarSlot->CommandType == HotbarSlotType.Macro)
+                {
+                    ActionBarSkill skill = new(actionBarSlot->Icon, hotBarSlot->CommandId, actionBarIndex, slotIndex);
+                    actionBarSkills.Add(skill);
+                }
             }
         }
 
