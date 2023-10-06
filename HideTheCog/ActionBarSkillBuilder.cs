@@ -27,15 +27,14 @@ public unsafe class ActionBarSkillBuilder
     {
         List<ActionBarSkill> actionBarSkills = new();
 
-        for (int actionBarIndex = 0; actionBarIndex < _actionBarNames.Count; actionBarIndex++)
+        for (uint actionBarIndex = 0; actionBarIndex < _actionBarNames.Count; actionBarIndex++)
         {
             var actionBar = GetActionBar(actionBarIndex)->ActionBarSlots;
-            var hotBar = GetHotBar(actionBarIndex)->Slot;
 
-            for (int slotIndex = 0; slotIndex < ACTION_BAR_SLOTS_COUNT; slotIndex++)
+            for (uint slotIndex = 0; slotIndex < ACTION_BAR_SLOTS_COUNT; slotIndex++)
             {
                 var actionBarSlot = &actionBar[slotIndex];
-                var hotBarSlot = hotBar[slotIndex];
+                var hotBarSlot = GetHotBarModule()->GetSlotById(actionBarIndex, slotIndex);
 
                 if (hotBarSlot->CommandType == HotbarSlotType.Macro)
                 {
@@ -48,14 +47,14 @@ public unsafe class ActionBarSkillBuilder
         return actionBarSkills;
     }
 
-    private AddonActionBarBase* GetActionBar(int actionBarIndex)
+    private AddonActionBarBase* GetActionBar(uint actionBarIndex)
     {
         return (AddonActionBarBase*)AtkStage.GetSingleton()->RaptureAtkUnitManager->
-            GetAddonByName(_actionBarNames[actionBarIndex]);
+            GetAddonByName(_actionBarNames[(int)actionBarIndex]);
     }
 
-    private static HotBar* GetHotBar(int actionBarIndex)
+    private static RaptureHotbarModule* GetHotBarModule()
     {
-        return Framework.Instance()->GetUiModule()->GetRaptureHotbarModule()->HotBar[actionBarIndex];
+        return Framework.Instance()->GetUiModule()->GetRaptureHotbarModule();
     }
 }

@@ -7,10 +7,10 @@ public unsafe class ActionBarSkill
 {
     private AtkResNode* _macroIcon { get; init; }
     public uint CommandId { get; init; }
-    public int ActionBarIndex { get; init; }
-    public int SlotIndex { get; init; }
+    public uint ActionBarIndex { get; init; }
+    public uint SlotIndex { get; init; }
 
-    public ActionBarSkill(AtkComponentNode* iconComponent, uint commandId, int actionBarIndex, int slotIndex)
+    public ActionBarSkill(AtkComponentNode* iconComponent, uint commandId, uint actionBarIndex, uint slotIndex)
     {
         _macroIcon = iconComponent->Component->UldManager.NodeList[15];
         CommandId = commandId;
