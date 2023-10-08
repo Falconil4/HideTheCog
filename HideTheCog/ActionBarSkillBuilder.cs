@@ -29,11 +29,14 @@ public unsafe class ActionBarSkillBuilder
 
         for (uint actionBarIndex = 0; actionBarIndex < _actionBarNames.Count; actionBarIndex++)
         {
-            var actionBar = GetActionBar(actionBarIndex)->ActionBarSlots;
+            var actionBar = GetActionBar(actionBarIndex);
+            if (actionBar == null) continue;
+
+            var actionBarSlots = actionBar->ActionBarSlots;
 
             for (uint slotIndex = 0; slotIndex < ACTION_BAR_SLOTS_COUNT; slotIndex++)
             {
-                var actionBarSlot = &actionBar[slotIndex];
+                var actionBarSlot = &actionBarSlots[slotIndex];
                 var hotBarSlot = GetHotBarModule()->GetSlotById(actionBarIndex, slotIndex);
 
                 if (hotBarSlot->CommandType == HotbarSlotType.Macro)
