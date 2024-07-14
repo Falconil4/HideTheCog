@@ -1,16 +1,16 @@
 {
     "Author": "Falco",
     "Name": "Hide The Cog",
-    "InternalName": "HideTheCog",
-    "Description": "",
+    "Punchline": "Hides the macro cog icon",
+    "Description": "Hides the macro cog icon from your hotbars",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/Falconil4/HideTheCog",
-    "DalamudApiLevel": 9,
-    "LoadRequiredState": 0,
-    "LoadSync": false,
-    "LoadPriority": 0,
-    "Punchline": "Hides the macro cog icon",
-    "AcceptsFeedback": true,
+    "DalamudApiLevel": 10,
+    "Tags": [
+        "actionbar",
+        "cog",
+        "ui"
+    ],
     "DownloadLinkInstall": "https://github.com/Falconil4/HideTheCog/raw/main/latest.zip",
     "DownloadLinkTesting": "https://github.com/Falconil4/HideTheCog/raw/main/latest.zip",
     "DownloadLinkUpdate": "https://github.com/Falconil4/HideTheCog/raw/main/latest.zip"
